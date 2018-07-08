@@ -49,6 +49,8 @@ for myArray
     signal.go!
 
 err, signals <~ branch.joined
+# all async operations are finished at this point.
 ```
-err: The error either set by SignalBranch's timeout or any of signals (timeout or by `.go` method's err parameter)
-signals: Array of branch `Signal`s where each has at least `error` and `response[]` properties.
+**err** : 
+The error either set by SignalBranch's timeout or any of signals (timeout or by `.go` method's err parameter)
+signals: Array of that branch's `Signal` instances where each instance has at least `error` and `response[]` properties.
