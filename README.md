@@ -44,7 +44,7 @@ When `.joined`, returns overall `error` and branch `signals`
 branch = new SignalBranch {timeout?}
 
 for myArray
-    signal = branch.add!  # adds a new signal branch
+    signal = branch.add!  # adds a new signal to the branch
     # do something async here 
     signal.go!
 
