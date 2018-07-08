@@ -61,4 +61,5 @@ err, signals <~ branch.joined
 * any of branch signals, either by
   * Signal's timeout (defined by `branch.add timeout`) or 
   * by `.go` method's `err` argument
-signals: Array of that branch's `Signal` instances where each instance has at least `error` and `response[]` properties.
+
+**signals** : Array of that branch's `Signal` instances where each instance has at least `error` and `response[]` properties.
