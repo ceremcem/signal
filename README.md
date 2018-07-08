@@ -3,7 +3,7 @@
 
 # Description
 
-This is the one of the core libraries used in [ScadaJS](https://github.com/aktos-io/scada.js) for managing events, timeouts and flow branches.
+This is one of the core libraries used in [ScadaJS](https://github.com/aktos-io/scada.js) for managing events, timeouts and signalling between flow branches.
 
 In a process flow, a condition may need to `.wait` for an external signal from another
 function's callback, from another process or from another network device.
