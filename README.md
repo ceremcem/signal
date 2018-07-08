@@ -1,3 +1,6 @@
+![image](https://user-images.githubusercontent.com/6639874/42417478-edd65554-8293-11e8-894d-d1995ac247b2.png)
+
+
 # Description
 
 In a process flow, a condition may need to wait for an external signal from another
