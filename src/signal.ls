@@ -27,7 +27,8 @@ export class Signal
         #@log.log "trying to fire..."
         return if typeof! @callback?.handler isnt \Function
         params = unless error then @response else []
-        @error = error?.reason
+        unless @error
+            @error = error?.reason
         {handler, ctx} = @callback
         t0 = Date.now!
         err = @error
@@ -67,12 +68,13 @@ export class Signal
     clear: ->
         @should-run = no
 
-    go: (...args) ->
+    go: (err, ...args) ->
         if @skip-next
             @skip-next = no
             return
         @should-run = yes
         @response = args
+        @error = err
         #@log.log "called 'go!'" , @response
         if @waiting
             @fire!
