@@ -27,13 +27,13 @@ export class SignalBranch
 
     joined: (callback) ->
         if @count is 0
-            @main.go null
+            @main.go err=null
 
         @main.wait @timeout, (err) ~>
             for @signals
-                ..clear!
                 if ..error
-                    unless err => err := {}
+                    unless err => err = {}
                     err.signals = true
+                ..clear!
 
             callback err, @signals
