@@ -15,6 +15,7 @@ export class Signal
     reset: ->
         # clear everything like the object is
         # initialized for the first time
+        #@log.debug "Resetting signal."
         delete @callback.handler
         delete @callback.ctx
         @should-run = no
@@ -30,8 +31,8 @@ export class Signal
         {handler, ctx} = @callback
         t0 = Date.now!
         err = @error
-        @reset!
         set-immediate ~>
+            @reset!
             handler.call ctx, err, ...params
             if @debug => @log.debug "...signal has been fired."
             if Date.now! - t0 > 100ms
@@ -43,9 +44,8 @@ export class Signal
             callback = timeout
             timeout = 0
         if @waiting
-            console.error "We were waiting already. Why hit here?"
+            @log.error "Can not wait over and over, skipping this one."
             return
-        @error = \UNFINISHED
 
         #if @debug => @log.debug "...adding this callback"
         @callback = {ctx: this, handler: callback}
@@ -73,7 +73,7 @@ export class Signal
         @should-run = yes
         @response = args
         @error = err
-        #@log.log "called 'go!'" , @response
+        #@log.log "called 'go!' (was waiting: #{@waiting})" , @response
         if @waiting
             @fire!
 
@@ -85,7 +85,7 @@ export class Signal
         try clear-timeout @timer
         @timer = sleep @timeout, ~>
             if @waiting
-                #@log.log "firing with timeout! timeout: #{@timeout}"
                 @should-run = yes
+                #@log.log "firing with timeout! timeout: #{@timeout}"
                 @error = \TIMEOUT
                 @fire!
