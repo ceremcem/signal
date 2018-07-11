@@ -9016,7 +9016,7 @@ out$.Signal = Signal = (function(){
     if (opts.debug) {
       this.debug = true;
     }
-    this.name = opts.name || arguments.callee.caller.name;
+    this.name = opts.name || 'Signal';
     this.log = new Logger(this.name);
     this.response = [];
     this.callback = {
@@ -9050,8 +9050,8 @@ out$.Signal = Signal = (function(){
     ref1$ = this.callback, handler = ref1$.handler, ctx = ref1$.ctx;
     t0 = Date.now();
     err = this.error;
-    this.reset();
     return setImmediate(function(){
+      this$.reset();
       handler.call.apply(handler, [ctx, err].concat(slice$.call(params)));
       if (this$.debug) {
         this$.log.debug("...signal has been fired.");
@@ -9067,10 +9067,9 @@ out$.Signal = Signal = (function(){
       timeout = 0;
     }
     if (this.waiting) {
-      console.error("We were waiting already. Why hit here?");
+      this.log.error("Can not wait over and over, skipping this one.");
       return;
     }
-    this.error = 'UNFINISHED';
     this.callback = {
       ctx: this,
       handler: callback
@@ -9118,8 +9117,8 @@ out$.Signal = Signal = (function(){
       clearTimeout(this.timer);
     } catch (e$) {}
     return this.timer = sleep(this.timeout, function(){
-      this$.shouldRun = true;
       if (this$.waiting) {
+        this$.shouldRun = true;
         this$.error = 'TIMEOUT';
         return this$.fire();
       }
