@@ -26,9 +26,7 @@ export class Signal
     fire: (error) ->
         #@log.log "trying to fire..."
         return if typeof! @callback?.handler isnt \Function
-        params = unless error then @response else []
-        unless @error
-            @error = error?.reason
+        params = unless @error then @response else []
         {handler, ctx} = @callback
         t0 = Date.now!
         err = @error
@@ -89,4 +87,5 @@ export class Signal
             @should-run = yes
             #@log.log "firing with timeout! timeout: #{@timeout}"
             if @waiting
-                @fire {reason: \timeout}
+                @error = \TIMEOUT
+                @fire!
