@@ -5,7 +5,7 @@ export class Signal
     (opts={}) ->
         if opts.debug
             @debug = yes
-        @name = opts.name or arguments.callee.caller.name
+        @name = opts.name or \Signal
         @log = new Logger @name
         @response = []
         @callback = {ctx: null, handler: null}
@@ -84,8 +84,8 @@ export class Signal
             @timeout = duration
         try clear-timeout @timer
         @timer = sleep @timeout, ~>
-            @should-run = yes
-            #@log.log "firing with timeout! timeout: #{@timeout}"
             if @waiting
+                #@log.log "firing with timeout! timeout: #{@timeout}"
+                @should-run = yes
                 @error = \TIMEOUT
                 @fire!
