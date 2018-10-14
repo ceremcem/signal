@@ -7,6 +7,14 @@ export class SignalBranch
         @main = new Signal
         @signals = []
         @error = null
+        @branches = []
+
+    cancel: ->
+        @main.cancel!
+        @main = null
+        for i of @signals
+            @signals[i].cancel!
+            @signals[i] = null
 
     add: (opts) ->
         timeout = opts?timeout or @timeout

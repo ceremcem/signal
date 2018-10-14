@@ -12,6 +12,9 @@ export class Signal
         if @debug => @log.debug "Initialized new signal."
         @reset!
 
+    cancel: ->
+        @reset!
+
     reset: ->
         # clear everything like the object is
         # initialized for the first time
