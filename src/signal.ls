@@ -34,8 +34,8 @@ export class Signal
         {handler, ctx} = @callback
         t0 = Date.now!
         err = @error
+        @reset!
         set-immediate ~>
-            @reset!
             handler.call ctx, err, ...params
             if @debug => @log.debug "...signal has been fired."
             if Date.now! - t0 > 100ms
