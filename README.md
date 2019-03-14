@@ -56,6 +56,8 @@ for myArray
 err, signals <~ branch.joined
 # all async operations are finished at this point.
 ```
+**branch.cancel!**: Cancels the execution and properly cleans up the code registered by/after `branch.joined`. 
+
 **err** : The error either set by
 * SignalBranch's master timeout or
 * any of branch signals, either by
