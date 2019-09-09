@@ -90,5 +90,11 @@ export class Signal
             if @waiting
                 @should-run = yes
                 #@log.log "firing with timeout! timeout: #{@timeout}"
-                @error = \TIMEOUT
-                @fire!
+                if typeof! @timeout-handler is \Function 
+                    @timeout-handler!
+                else 
+                    @error = \TIMEOUT
+                    @fire!
+
+    on-timeout: (callback) -> 
+        @timeout-handler = callback 
