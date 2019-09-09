@@ -10,6 +10,7 @@ export class Signal
         @response = []
         @callback = {ctx: null, handler: null}
         if @debug => @log.debug "Initialized new signal."
+        @reusable = opts.reusable # reuse the `wait handler` between `fire`s 
         @reset!
 
     cancel: ->
@@ -19,13 +20,16 @@ export class Signal
         # clear everything like the object is
         # initialized for the first time
         #@log.debug "Resetting signal."
-        delete @callback.handler
-        delete @callback.ctx
+        unless @reusable
+            delete @callback.handler
+            delete @callback.ctx
         @should-run = no
-        @waiting = no
         try clear-timeout @timer
         @timer = void
         @skip-next = no
+
+    waiting: ~
+        -> typeof! @callback?.handler is \Function 
 
     fire: (error) ->
         #@log.log "trying to fire..."
@@ -52,7 +56,6 @@ export class Signal
 
         #if @debug => @log.debug "...adding this callback"
         @callback = {ctx: this, handler: callback}
-        @waiting = yes
         unless is-it-NaN timeout
             if timeout > 0
                 @timeout = timeout
@@ -89,7 +92,7 @@ export class Signal
         @timer = sleep @timeout, ~>
             if @waiting
                 @should-run = yes
-                #@log.log "firing with timeout! timeout: #{@timeout}"
+                if @debug => @log.log "firing with timeout! timeout: #{@timeout}"
                 if typeof! @timeout-handler is \Function 
                     @timeout-handler!
                 else 

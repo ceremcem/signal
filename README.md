@@ -29,11 +29,27 @@ console.log "Button number #{button-num} is pressed!"
 ```ls
 signal = new Signal
 
-signal.wait [timeout], callback(err, ...args)  # Waits for `signal.go` to call the `callback`.
+signal.wait [timeout,] callback(err, ...args)  # Waits for `signal.go` to call the `callback`.
 
 ...
 
 signal.go err, ...args
+```
+
+### Reusable signals 
+
+If you want to declare `.wait` handler once and use the same handler over and over again, create your `Signal` instance with `{reusable: yes}` option: 
+
+```
+signal = new Signal {+reusable}
+
+signal.wait [timeout,] callback(err, ...args)  # Waits for `signal.go` to call the `callback`.
+
+...
+
+on-some-condition -> 
+    signal.heartbeat! # this will re-set the signal
+
 ```
 
 # SignalBranch
